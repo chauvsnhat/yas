@@ -230,7 +230,7 @@ class ProductServiceIT {
     @Test
     void getProduct_whenProductIdValid_shouldSuccess() {
         List<Product> productDbList = productRepository.findAll();
-        assertNotNull(productService.getProductById(productDbList.getFirst().getId()));
+        assertNotNull(productService.getProductById(productDbList.get(0).getId()));
     }
 
     @Test
@@ -283,7 +283,7 @@ class ProductServiceIT {
 
     @Test
     void deleteProduct_givenParentProduct_thenSuccess() {
-        Long id = productRepository.findAll().getFirst().getId();
+        Long id = productRepository.findAll().get(0).getId();
         productService.deleteProduct(id);
         Optional<Product> result = productRepository.findById(id);
         // Soft delete, set published to false
@@ -309,7 +309,7 @@ class ProductServiceIT {
         productOptionCombination2.setValue(cpu);
         productOptionCombination2.setDisplayOrder(1);
 
-        Product parent = productRepository.findAll().getFirst();
+        Product parent = productRepository.findAll().get(0);
         Product product = getVariant(parent);
         Product afterProduct = productRepository.save(product);
 
@@ -340,7 +340,7 @@ class ProductServiceIT {
 
     @Test
     void deleteProduct_givenNoOption_noDeleteAll() {
-        Product parent = productRepository.findAll().getFirst();
+        Product parent = productRepository.findAll().get(0);
         Product product = getVariant(parent);
         Product afterProduct = productRepository.save(product);
 
@@ -367,7 +367,7 @@ class ProductServiceIT {
 
         // Assert result
         assertEquals(1, result.productContent().size());
-        ProductThumbnailGetVm thumbnailGetVm = result.productContent().getFirst();
+        ProductThumbnailGetVm thumbnailGetVm = result.productContent().get(0);
         assertEquals("product2", thumbnailGetVm.name());
         assertEquals("slug2", thumbnailGetVm.slug());
         assertEquals(10.0, thumbnailGetVm.price());
@@ -390,8 +390,8 @@ class ProductServiceIT {
         List<Long> brandIds = List.of(brand1.getId(), brand2.getId());
         List<ProductListVm> actualResponse = productService.getProductByBrandIds(brandIds);
         assertEquals(10, actualResponse.size());
-        assertEquals("product1", actualResponse.getFirst().name());
-        assertEquals("slug1", actualResponse.getFirst().slug());
+        assertEquals("product1", actualResponse.get(0).name());
+        assertEquals("slug1", actualResponse.get(0).slug());
     }
 
 
