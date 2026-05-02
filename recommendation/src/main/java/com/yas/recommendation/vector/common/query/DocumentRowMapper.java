@@ -1,6 +1,6 @@
 package com.yas.recommendation.vector.common.query;
 
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 /**
  * Document Row Mapper.
  */
-class DocumentRowMapper implements RowMapper<Document> {
+public class DocumentRowMapper implements RowMapper<Document> {
     public static final String ID = "id";
     public static final String CONTENT = "content";
     public static final String METADATA = "metadata";

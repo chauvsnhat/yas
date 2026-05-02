@@ -181,10 +181,56 @@ pipeline {
                 }
             }
         }
-    }
+        
 
         // ==========================================
-        // CỤM 3: PAYMENT PAYPAL SERVICE
+        // CỤM 3: RECOMMENDATION SERVICE
+        // ==========================================
+        stage('Recommendation Service') {
+            when { 
+                changeset "recommendation/**" 
+            }
+            stages {
+                stage('Build Recommendation') {
+                    steps {
+                        echo "Phát hiện thay đổi. Đang build Recommendation Service..."
+                        sh 'mvn --projects recommendation --also-make clean install -DskipTests'
+                    }
+                }
+                
+                stage('Test Recommendation') {
+                    steps {
+                        echo "Đang chạy Test cho Recommendation Service..."
+                        sh 'mvn --projects recommendation --also-make test'
+                    }
+                    post {
+                        always {
+                            echo "Đang lưu kết quả Test và Coverage của Recommendation..."
+                            junit 'recommendation/target/surefire-reports/*.xml'
+                            archiveArtifacts artifacts: 'recommendation/target/site/jacoco/**', allowEmptyArchive: true
+                        }
+                    }
+                }
+
+                stage('Quality: SonarQube Scan Recommendation') {
+                    steps {
+                        echo 'Đang gửi code và báo cáo Test của Recommendation lên SonarQube...'
+                        sh '''
+                        mvn sonar:sonar \
+                        -pl recommendation -am \
+                        -Dsonar.projectKey=yas-recommendation \
+                        -Dsonar.projectName="YAS Recommendation Service" \
+                        -Dsonar.host.url=http://192.168.31.16:9000 \
+                        -Dsonar.login=squ_e4b2aecfd410669cc972426e5a7b160c1760e2e5 \
+                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        '''
+                    }
+                }
+            }
+        }
+
+        // ==========================================
+        // CỤM 4: PAYMENT PAYPAL SERVICE
         // ==========================================
         stage('Payment Paypal Service') {
             when { 

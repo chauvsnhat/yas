@@ -84,7 +84,7 @@ public class ProductVectorRepositoryTest extends BaseVectorRepositoryTest<Produc
         var expectedId = productVectorRepository.getIdGenerator(productId).generateId();
         assertEquals(
             expectedId,
-            docIdsCaptor.getValue().getFirst(),
+            docIdsCaptor.getValue().get(0),
             "DocId must be generated same as 'IdGenerator' implementation"
         );
     }
@@ -109,10 +109,10 @@ public class ProductVectorRepositoryTest extends BaseVectorRepositoryTest<Produc
         assertSearchRequest(searchRequestCaptor.getValue(), searchedProduct);
 
         assertEquals(1, productDocuments.size());
-        assertEquals(similarDocument.getContent(), productDocuments.getFirst().getContent());
-        assertEquals(similarDocument.getContent(), productDocuments.getFirst().getContent());
-        assertEquals(similarDocument.getMetadata().keySet(), productDocuments.getFirst().getMetadata().keySet());
-        assertEquals(similarDocument.getMetadata().entrySet(), productDocuments.getFirst().getMetadata().entrySet());
+        assertEquals(similarDocument.getContent(), productDocuments.get(0).getContent());
+        assertEquals(similarDocument.getContent(), productDocuments.get(0).getContent());
+        assertEquals(similarDocument.getMetadata().keySet(), productDocuments.get(0).getMetadata().keySet());
+        assertEquals(similarDocument.getMetadata().entrySet(), productDocuments.get(0).getMetadata().entrySet());
     }
 
     @DisplayName("When creating document, document must be created as metadata defined")
@@ -132,7 +132,7 @@ public class ProductVectorRepositoryTest extends BaseVectorRepositoryTest<Produc
         verify(vectorStore, times(1)).add(docsCaptor.capture());
         assertFalse(docsCaptor.getValue().isEmpty(), "Document must be added");
 
-        var createdDoc = docsCaptor.getValue().getFirst();
+        var createdDoc = docsCaptor.getValue().get(0);
         var expectedId = productVectorRepository.getIdGenerator(productId).generateId();
         assertEquals(
             expectedId,

@@ -242,7 +242,7 @@ public class ProductCdcConsumerTest extends CdcConsumerTest<ProductMsgKey, Produ
         //Verify data
         results = findAll();
         assertThat(results).isNotEmpty();
-        Map<String, Object> firstRow = results.getFirst();
+        Map<String, Object> firstRow = results.get(0);
         assertTrue(firstRow.get("content").toString().contains(PRODUCT_NAME_UPDATE), "Content is not correct.");
     }
 

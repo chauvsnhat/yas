@@ -6,6 +6,7 @@ import com.yas.commonlibrary.kafka.cdc.BaseCdcConsumer;
 import com.yas.commonlibrary.kafka.cdc.RetrySupportDql;
 import com.yas.commonlibrary.kafka.cdc.message.ProductCdcMessage;
 import com.yas.commonlibrary.kafka.cdc.message.ProductMsgKey;
+import com.yas.recommendation.vector.product.service.ProductVectorSyncService;
 import jakarta.validation.Valid;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -21,10 +22,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductSyncDataConsumer extends BaseCdcConsumer<ProductMsgKey, ProductCdcMessage> {
 
-    private final ProductSyncService productSyncService;
+    private final ProductVectorSyncService productVectorSyncService;
 
-    public ProductSyncDataConsumer(ProductSyncService productSyncService) {
-        this.productSyncService = productSyncService;
+    public ProductSyncDataConsumer(ProductVectorSyncService productVectorSyncService) {
+        this.productVectorSyncService = productVectorSyncService;
     }
 
     @KafkaListener(
@@ -39,6 +40,6 @@ public class ProductSyncDataConsumer extends BaseCdcConsumer<ProductMsgKey, Prod
         @Payload(required = false) @Valid ProductCdcMessage productCdcMessage,
         @Headers MessageHeaders headers
     ) {
-        processMessage(key, productCdcMessage, headers, productSyncService::sync);
+        processMessage(key, productCdcMessage, headers, productVectorSyncService::sync);
     }
 }

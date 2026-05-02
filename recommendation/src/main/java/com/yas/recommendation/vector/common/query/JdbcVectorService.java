@@ -1,6 +1,6 @@
 package com.yas.recommendation.vector.common.query;
 
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yas.recommendation.configuration.EmbeddingSearchConfiguration;
 import com.yas.recommendation.vector.common.document.BaseDocument;
 import com.yas.recommendation.vector.common.document.DocumentMetadata;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * Jdbc Vector service support native query vector search for document.
  */
 @Service
-class JdbcVectorService {
+public class JdbcVectorService {
 
     public static final String DEFAULT_DOCID_PREFIX = "PRODUCT";
 
@@ -86,14 +86,14 @@ class JdbcVectorService {
                     vs.id,
                     vs.content,
                     vs.metadata,
-                    (vs.embedding <=> entity.embedding) AS similarity
+                    (1 - (vs.embedding <=> entity.embedding)) AS similarity
                 FROM
                     vector_store vs
                 JOIN
                     entity ON true
-                WHERE vs.id <> ? AND (vs.embedding <=> entity.embedding) > ?
+                WHERE vs.id <> ? AND (1 - (vs.embedding <=> entity.embedding)) > ?
                 ORDER BY
-                    similarity
+                    similarity DESC
                 LIMIT ?
                 """.formatted(vectorTableName);
     }
