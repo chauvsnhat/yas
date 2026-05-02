@@ -93,7 +93,7 @@ public class PaypalService {
             HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersCaptureRequest);
             if (httpResponse.result().status() != null) {
                 Order order = httpResponse.result();
-                Capture capture = order.purchaseUnits().getFirst().payments().captures().getFirst();
+                Capture capture = order.purchaseUnits().get(0).payments().captures().get(0);
 
                 String paypalFee = capture.sellerReceivableBreakdown().paypalFee().value();
                 BigDecimal paymentFee = new BigDecimal(paypalFee);
